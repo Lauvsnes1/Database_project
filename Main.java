@@ -7,7 +7,7 @@ public class Main {
     private static String type;
     private static String eMail;
     private static String userType;
-    private static User UseCase1Ctrl;
+    private static User user;
 
     public static Scanner scannerObject = new Scanner(System.in);
 
@@ -30,11 +30,12 @@ public class Main {
 
         if (("'" + resp.getEmail() + "'").equals(Email)) // De ekstra fnuttene er for å få riktig format på strengen
         {
-            System.out.println("Logget inn!");
+
             userID = resp.getUserID();
             Email = resp.getEmail();
             password = resp.getPassword();
             userType = resp.getUserType();
+            System.out.println("Du er logget inn!\n Velkommen " + userType + " " + Email);
 
         } else {
             System.out.println("Feil passord eller brukerernavn");
@@ -42,4 +43,11 @@ public class Main {
 
     }
 
+    private static void Course() {
+        // if (user == "student")
+        {
+
+        }
+
+    }
 }
