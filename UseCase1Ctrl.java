@@ -8,7 +8,7 @@ public class UseCase1Ctrl extends DBConn {
 
     protected User authUser(String Email, String password) {
         String error = "her var det en feil gitt!";
-        ArrayList<User> users = new ArrayList<>();
+        User user = new User();
 
         try {
             Statement statement = conn.createStatement();
@@ -19,17 +19,26 @@ public class UseCase1Ctrl extends DBConn {
             String query = "SELECT * FROM users WHERE Email = " + Email + "AND Pword = " + password;
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
-                users.add(new User(result.getInt("UserID"), result.getString("Email"), result.getString("Pword"),
-                        result.getString("UserType")));
-                System.out.println(users);
+                User existingUser = new User(result.getInt("UserID"), result.getString("Email"),
+                        result.getString("Pword"), result.getString("UserType"));
+
+                // result.getString("UserType"));
+                // users.add(new User(result.getInt("UserID"), result.getString("Email"),
+                // result.getString("Pword"),
+                // result.getString("UserType")));
                 // return new User(result.getInt("UserID"), result.getString("Email"),
                 // result.getString("Pword"), result.getString("UserType"));
+                return existingUser;
             }
         } catch (SQLException e) {
+            System.out.println("Feil brukernavn eller passord");
             e.printStackTrace();
         }
-        return users.stream().findAny().get();// filter(u -> u.email.matches(Email) &&
-                                              // u.pword.matches(password)).findAny().get();
-    }
+        return user;
 
+        // (!users.isEmpty()) {
+        // return users.stream().findAny().get();// filter(u -> u.email.matches(Email)
+        // &&
+        // u.pword.matches(password)).findAny().get();
+    }
 }

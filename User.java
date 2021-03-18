@@ -11,6 +11,10 @@ public class User {
         this.pword = pword;
     }
 
+    public User() {
+
+    }
+
     public String getEmail() {
         return email;
     }

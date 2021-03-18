@@ -3,9 +3,10 @@ import java.sql.*;
 
 public class Main {
 
-    private static String userID;
+    private static int userID;
     private static String type;
     private static String eMail;
+    private static String userType;
     private static User UseCase1Ctrl;
 
     public static Scanner scannerObject = new Scanner(System.in);
@@ -27,11 +28,16 @@ public class Main {
         useCase1Ctrl.connect();
         User resp = useCase1Ctrl.authUser(Email, password);
 
-        System.out.println(Email);
-        System.out.println(password);
-        if (resp.getEmail() == Email) {
+        if (("'" + resp.getEmail() + "'").equals(Email)) // De ekstra fnuttene er for å få riktig format på strengen
+        {
             System.out.println("Logget inn!");
+            userID = resp.getUserID();
+            Email = resp.getEmail();
+            password = resp.getPassword();
+            userType = resp.getUserType();
 
+        } else {
+            System.out.println("Feil passord eller brukerernavn");
         }
 
     }
