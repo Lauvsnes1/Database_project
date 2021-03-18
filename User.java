@@ -10,4 +10,21 @@ public class User {
         this.userType = userType;
         this.pword = pword;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return pword;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
 }

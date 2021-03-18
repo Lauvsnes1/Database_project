@@ -6,10 +6,8 @@ public class UseCase1Ctrl extends DBConn {
     private String Email;
     private String password;
 
-    private User logInn(String email, String password) {
+    protected User authUser(String Email, String password) {
         String error = "her var det en feil gitt!";
-        // this.userID = userID;
-        // this.password = password;
         ArrayList<User> users = new ArrayList<>();
 
         try {
@@ -18,18 +16,20 @@ public class UseCase1Ctrl extends DBConn {
             // " + Email + "AND Pword = "+ password;
             // String query = "SELECT UserID, Email, Pword, UserType FROM user WHERE Email =
             // (?) AND Pword = (?)";
-            String query = "SELECT * FROM user";
+            String query = "SELECT * FROM users WHERE Email = " + Email + "AND Pword = " + password;
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
                 users.add(new User(result.getInt("UserID"), result.getString("Email"), result.getString("Pword"),
                         result.getString("UserType")));
+                System.out.println(users);
                 // return new User(result.getInt("UserID"), result.getString("Email"),
                 // result.getString("Pword"), result.getString("UserType"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return users.stream().filter(u -> u.email.equals(email) && u.pword.equals(password)).findAny().get();
+        return users.stream().findAny().get();// filter(u -> u.email.matches(Email) &&
+                                              // u.pword.matches(password)).findAny().get();
     }
 
 }
