@@ -17,7 +17,6 @@ public class Main {
     private static void LogInn() {
         UseCase1Ctrl useCase1Ctrl = new UseCase1Ctrl();
         useCase1Ctrl.connect();
-
     }
 
 }
