@@ -1,0 +1,33 @@
+import java.sql.*;
+import java.util.*;
+
+public class UseCase3Ctrl extends DBConn {
+
+    private PreparedStatement replyStatement;
+    private int postID;
+
+    public void startReply() {
+        try {
+            replyStatement = conn.prepareStatement("INSERT INTO reply VALUES ((?),(?),(?),(?),(?))");
+        } catch (Exception e) {
+            System.out.println("Error during prepare of insert values into reply");
+
+        }
+    }
+
+    public void makeReply(int postID, int anonymous, String content, int userID, int threadID) {
+        try {
+            replyStatement.setInt(1, postID);
+            replyStatement.setInt(2, anonymous);
+            replyStatement.setString(3, content);
+            replyStatement.setInt(4, userID);
+            replyStatement.setInt(5, threadID);
+            replyStatement.execute();
+            System.out.println("Svaret ble lagt inn suksessfullt!");
+        } catch (Exception e) {
+            System.out.println("error inserting values into reply");
+            e.printStackTrace();
+        }
+    }
+
+}
