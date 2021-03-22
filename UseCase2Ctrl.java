@@ -1,7 +1,5 @@
 import java.sql.PreparedStatement;
 
-import com.mysql.cj.xdevapi.PreparableStatement;
-
 public class UseCase2Ctrl extends DBConn {
 
     private PreparedStatement threadStatement;
