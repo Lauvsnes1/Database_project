@@ -3,11 +3,7 @@ import java.util.*;
 
 public class UseCase1Ctrl extends DBConn {
 
-    private String Email;
-    private String password;
-
     protected User authUser(String Email, String password) {
-        String error = "her var det en feil gitt!";
         User user = new User();
 
         try {
@@ -21,7 +17,6 @@ public class UseCase1Ctrl extends DBConn {
                 return existingUser;
             }
         } catch (SQLException e) {
-            System.out.println("Feil brukernavn eller passord");
             e.printStackTrace();
         }
         return user;
