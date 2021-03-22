@@ -7,9 +7,8 @@ public class UseCase4Ctrl extends DBConn {
         ArrayList<Thread> threadList = new ArrayList<>();
         try {
             Statement statement = conn.createStatement();
-            System.out.println("kom hit");
-            String query = "SELECT * FROM thread NATURAL INNER JOIN folder INNER JOIN course ON course.CourseID = folder.CourseID WHERE folder.CourseID="
-                    + courseID + "AND title LIKE '%" + keyword + "%'";
+            String query = "SELECT * FROM thread NATURAL INNER JOIN folder INNER JOIN course ON course.CourseID = folder.CourseID WHERE folder.CourseID= "
+                    + courseID + " AND Header LIKE '%" + keyword + "%'";
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
                 threadList.add(new Thread(result.getInt("PostID"), result.getInt("Anonymous"),
