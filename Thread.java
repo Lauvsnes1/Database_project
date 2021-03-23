@@ -7,6 +7,10 @@ public class Thread {
     String content;
     String tag;
 
+    Thread() {
+
+    }
+
     Thread(int postID, int anonymous, String content, String tag, String header, int userID, int folderID) {
         this.postID = postID;
         this.anonymous = anonymous;
@@ -23,6 +27,10 @@ public class Thread {
 
     public String getHeader() {
         return header;
+    }
+
+    public String getContent() {
+        return content;
     }
 
 }

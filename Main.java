@@ -18,31 +18,48 @@ public class Main {
 
     public static void main(String[] args) {
         logInn();
+        if (userType.matches("instructor")) {
+            System.out.println("Tast 1 for å lese statistikk, tast 0 for å gå videre: ");
+            int choice = scannerObject.nextInt();
+            if (choice == 1) {
+                displayStatistics();
 
-        chooseCourse(userID);
+            }
+        } else {
 
-        System.out.println("\nSkriv inn inn ID på kurset du ønsker å gå inn på: ");
-        int courseID = scannerObject.nextInt();
-        chooseFolder(courseID);
+            chooseCourse(userID);
 
-        System.out.println("\nTrykk 1 for å søke etter tråd eller trykk 0 for å velge mappe");
-        int choice = scannerObject.nextInt();
-        if (choice == 1) {
-            scannerObject.nextLine();
-            System.out.println("\nSøkeord: ");
-            String keyword = scannerObject.nextLine();
-            searchFor(keyword, courseID);
+            System.out.println("\nSkriv inn inn ID på kurset du ønsker å gå inn på: ");
+            int courseID = scannerObject.nextInt();
+            chooseFolder(courseID);
 
-        } else if (choice == 0) {
-            System.out.println("\nSkriv inn inn ID på mappen du ønsker å gå inn i: ");
-            int folderID = scannerObject.nextInt();
+            System.out.println("\nTrykk 1 for å søke etter tråd eller trykk 0 for å velge mappe");
+            int choice = scannerObject.nextInt();
+            if (choice == 1) {
+                scannerObject.nextLine();
+                System.out.println("\nSøkeord: ");
+                String keyword = scannerObject.nextLine();
+                searchFor(keyword, courseID);
 
-            System.out.println("\nTrykk 0 for å opprette tråd og 1 for å opprette svar.");
-            int ans = scannerObject.nextInt();
-            if (ans == 0) {
-                createPost(folderID);
-            } else {
-                replyTo(folderID);
+            } else if (choice == 0) {
+                System.out.println("\nSkriv inn inn ID på mappen du ønsker å gå inn i: ");
+                int folderID = scannerObject.nextInt();
+
+                System.out.println("\nTrykk 0 for å opprette tråd, 1 for å opprette svar og 2 for å lese");
+                int ans = scannerObject.nextInt();
+                if (ans == 0) {
+                    createPost(folderID);
+                } else if (ans == 1) {
+                    replyTo(folderID);
+                } else if (ans == 2) {
+                    scannerObject.nextLine();
+                    chooseThread(folderID);
+                    System.out.println("\nSkriv inn ID på posten du ønsker å lese: ");
+                    int postID = scannerObject.nextInt();
+                    readThread(postID, userID);
+
+                }
+
             }
         }
     }
@@ -102,13 +119,14 @@ public class Main {
         UseCase2Ctrl useCase2Ctrl = new UseCase2Ctrl();
         useCase2Ctrl.connect();
         scannerObject.nextLine();
-        System.out.println("Skriv inn tittel på spørsmålet ditt: ");
+        System.out.println("\nSkriv inn tittel på spørsmålet ditt: ");
         String header = scannerObject.nextLine();
-        System.out.println("Skriv inn spørsmålet ditt: ");
+        System.out.println("\nSkriv inn spørsmålet ditt: ");
         String content = scannerObject.nextLine();
         try {
             useCase2Ctrl.startThread();
             useCase2Ctrl.makeThread(randomNum, 1, content, "question", header, userID, folderID);
+            readThread(randomNum, userID);
 
         } catch (Exception e) {
 
@@ -124,13 +142,14 @@ public class Main {
         threadCtrl.connect();
         ArrayList<Thread> threads = threadCtrl.getThreads(folderID);
         for (Thread thread : threads) {
-            System.out.println(thread.getPostID() + "     " + thread.getHeader());
+            System.out.println(thread.getPostID() + "\t" + thread.getHeader() + "\t" + thread.getContent());
         }
         System.out.println("\nSkriv inn ID på tråden du ønsker å svare på: ");
         int threadID = scannerObject.nextInt();
         scannerObject.nextLine();
         System.out.println("\nSkriv inn svar: ");
         String content = scannerObject.nextLine();
+        readThread(threadID, userID);
 
         UseCase3Ctrl useCase3Ctrl = new UseCase3Ctrl();
         useCase3Ctrl.connect();
@@ -153,8 +172,47 @@ public class Main {
         ArrayList<Thread> searchedThreads = searchController.search(keyword, courseID);
         System.out.println("\nSøket ditt ga følgende resultater: ");
         for (Thread thread : searchedThreads) {
-            System.out.println(thread.getPostID() + "     " + thread.getHeader());
+            System.out.println(thread.getPostID() + "\t" + thread.getHeader() + "\t" + thread.getContent());
         }
 
+    }
+
+    private static void readThread(int postID, int userID) {
+        UseCase5Ctrl viewCtrl = new UseCase5Ctrl();
+        viewCtrl.connect();
+        try {
+            viewCtrl.startViewed();
+            viewCtrl.viewPost(postID, userID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        InfoCtrl threadCtrl = new InfoCtrl();
+        threadCtrl.connect();
+        Thread thread = threadCtrl.getThread(postID);
+        System.out.println(
+                "\nHer er tråden: \n" + thread.getPostID() + "\t" + thread.getHeader() + "\t" + thread.getContent());
+
+    }
+
+    private static void chooseThread(int folderID) {
+        System.out.println("\nHer er trådene som finnes i mappen: ");
+        InfoCtrl threadCtrl = new InfoCtrl();
+        threadCtrl.connect();
+        ArrayList<Thread> threads = threadCtrl.getThreads(folderID);
+        for (Thread thread : threads) {
+            System.out.println(thread.getPostID() + "\t" + thread.getHeader());
+        }
+
+    }
+
+    private static void displayStatistics() {
+        UseCase5Ctrl readCtrl = new UseCase5Ctrl();
+        readCtrl.connect();
+        ArrayList<Viewed> views = readCtrl.postsRead();
+        System.out.println("Email:\t\t\tPosts Read:");
+        for (Viewed viewed : views) {
+            System.out.println(viewed.getEmail() + "\t\t\t" + viewed.getCount());
+
+        }
     }
 }

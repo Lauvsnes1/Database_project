@@ -67,4 +67,22 @@ public class InfoCtrl extends DBConn {
 
     }
 
+    public Thread getThread(int postID) {
+        Thread thread = new Thread();
+        try {
+            Statement statement = conn.createStatement();
+            String query = "SELECT * FROM thread WHERE PostID=" + postID;
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                Thread newThread = new Thread(result.getInt("PostID"), result.getInt("Anonymous"),
+                        result.getString("Content"), result.getString("Tag"), result.getString("Header"),
+                        result.getInt("UserID"), result.getInt("FolderID"));
+                return newThread;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return thread;
+    }
+
 }

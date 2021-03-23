@@ -3,11 +3,13 @@ import java.sql.PreparedStatement;
 public class UseCase2Ctrl extends DBConn {
 
     private PreparedStatement threadStatement;
+    private PreparedStatement postStatement;
     private int postID;
 
     public void startThread() {
         try {
             threadStatement = conn.prepareStatement("INSERT INTO thread VALUES ((?),(?),(?),(?),(?),(?),(?))");
+            postStatement = conn.prepareStatement("INSERT INTO post VALUES ((?),(?),(?),(?))");
         } catch (Exception e) {
             System.out.println("Error during prepare of insert values into thread");
 
@@ -26,6 +28,12 @@ public class UseCase2Ctrl extends DBConn {
             threadStatement.setInt(6, userID);
             threadStatement.setInt(7, folderID);
             threadStatement.execute();
+
+            postStatement.setInt(1, postID);
+            postStatement.setString(2, content);
+            postStatement.setInt(3, anonymous);
+            postStatement.setInt(4, userID);
+            postStatement.execute();
             System.out.println("Post opprettet vellykket!");
 
         } catch (Exception e) {
