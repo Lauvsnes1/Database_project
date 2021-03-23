@@ -7,6 +7,7 @@ public class UseCase3Ctrl extends DBConn {
     private PreparedStatement postStatement;
     private int postID;
 
+    //metode for å forberede en Reply
     public void startReply() {
         try {
             replyStatement = conn.prepareStatement("INSERT INTO reply VALUES ((?),(?),(?),(?),(?))");
@@ -16,7 +17,7 @@ public class UseCase3Ctrl extends DBConn {
 
         }
     }
-
+    //metode for å opprette en Reply
     public void makeReply(int postID, int anonymous, String content, int userID, int threadID) {
         try {
             replyStatement.setInt(1, postID);
@@ -32,6 +33,7 @@ public class UseCase3Ctrl extends DBConn {
             postStatement.setInt(4, userID);
             postStatement.execute();
             System.out.println("Svaret ble lagt inn suksessfullt!");
+        //dersom noe er galt printer vi feilens stackTrace for å finne ut av hvor feilen ligger
         } catch (Exception e) {
             System.out.println("error inserting values into reply");
             e.printStackTrace();
