@@ -5,7 +5,6 @@ public class UseCase3Ctrl extends DBConn {
 
     private PreparedStatement replyStatement;
     private PreparedStatement postStatement;
-    private int postID;
 
     //metode for å forberede en Reply
     public void startReply() {
@@ -32,8 +31,7 @@ public class UseCase3Ctrl extends DBConn {
             postStatement.setInt(3, anonymous);
             postStatement.setInt(4, userID);
             postStatement.execute();
-            System.out.println("Svaret ble lagt inn suksessfullt!");
-        //dersom noe er galt printer vi feilens stackTrace for å finne ut av hvor feilen ligger
+            System.out.println("\nSvaret ble lagt inn suksessfullt!");
         } catch (Exception e) {
             System.out.println("error inserting values into reply");
             e.printStackTrace();

@@ -1,70 +1,66 @@
 import java.util.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.sql.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
 
     private static int userID;
-    private static int courseID;
-    private static String type;
-    private static String eMail;
     private static String userType;
-    private static User user;
 
     public static Scanner scannerObject = new Scanner(System.in);
 
     public static void main(String[] args) {
-        logInn();
-        if (userType.matches("instructor")) {
-            System.out.println("Tast 1 for å lese statistikk, tast 0 for å gå videre: ");
+
+        while (logInn()) {
+            System.out.println("\nTast 1 for å lese statistikk(kun for instruktører), tast 0 for å gå videre: ");
             int choice = scannerObject.nextInt();
-            if (choice == 1) {
+            if (choice == 1 && userType.matches("instructor")) {
                 displayStatistics();
 
-            }
-        } else {
-
-            chooseCourse(userID);
-
-            System.out.println("\nSkriv inn inn ID på kurset du ønsker å gå inn på: ");
-            int courseID = scannerObject.nextInt();
-            chooseFolder(courseID);
-
-            System.out.println("\nTrykk 1 for å søke etter tråd eller trykk 0 for å velge mappe");
-            int choice = scannerObject.nextInt();
-            if (choice == 1) {
-                scannerObject.nextLine();
-                System.out.println("\nSøkeord: ");
-                String keyword = scannerObject.nextLine();
-                searchFor(keyword, courseID);
-
             } else if (choice == 0) {
-                System.out.println("\nSkriv inn inn ID på mappen du ønsker å gå inn i: ");
-                int folderID = scannerObject.nextInt();
 
-                System.out.println("\nTrykk 0 for å opprette tråd, 1 for å opprette svar og 2 for å lese");
-                int ans = scannerObject.nextInt();
-                if (ans == 0) {
-                    createPost(folderID);
-                } else if (ans == 1) {
-                    replyTo(folderID);
-                } else if (ans == 2) {
+                chooseCourse(userID);
+
+                System.out.println("\nSkriv inn inn ID på kurset du ønsker å gå inn på: ");
+                int courseID = scannerObject.nextInt();
+                chooseFolder(courseID);
+
+                System.out.println("\nTrykk 1 for å søke etter tråd eller trykk 0 for å velge mappe");
+                int choice2 = scannerObject.nextInt();
+                if (choice2 == 1) {
                     scannerObject.nextLine();
-                    chooseThread(folderID);
-                    System.out.println("\nSkriv inn ID på posten du ønsker å lese: ");
-                    int postID = scannerObject.nextInt();
-                    readThread(postID, userID);
+                    System.out.println("\nSøkeord: ");
+                    String keyword = scannerObject.nextLine();
+                    searchFor(keyword, courseID);
+
+                } else if (choice2 == 0) {
+                    System.out.println("\nSkriv inn inn ID på mappen du ønsker å gå inn i: ");
+                    int folderID = scannerObject.nextInt();
+
+                    System.out.println("\nTrykk 0 for å opprette tråd, 1 for å opprette svar og 2 for å lese");
+                    int choice3 = scannerObject.nextInt();
+                    if (choice3 == 0) {
+                        createPost(folderID);
+                    } else if (choice3 == 1) {
+                        replyTo(folderID);
+                    } else if (choice3 == 2) {
+                        scannerObject.nextLine();
+                        chooseThread(folderID);
+                        System.out.println("\nSkriv inn ID på posten du ønsker å lese: ");
+                        int postID = scannerObject.nextInt();
+                        readThread(postID, userID);
+
+                    }
 
                 }
-
+            } else {
+                System.out.println("\nDu har ikke tilgang til å lese statistikk");
             }
+            break;
         }
+
     }
 
-    private static void logInn() {
+    private static boolean logInn() {
 
         System.out.println("\nEmail: ");
         String Email = "\'" + scannerObject.next() + "\'";
@@ -83,11 +79,12 @@ public class Main {
             Email = resp.getEmail();
             password = resp.getPassword();
             userType = resp.getUserType();
-            System.out.println("Du er logget inn!\nVelkommen, " + userType + " " + Email);
-
+            System.out.println("\nDu er logget inn!\n\nVelkommen, " + userType + " " + Email);
+            return true;
         } else {
             System.out.println("Feil passord eller brukerernavn");
         }
+        return false;
 
     }
 
@@ -119,13 +116,39 @@ public class Main {
         UseCase2Ctrl useCase2Ctrl = new UseCase2Ctrl();
         useCase2Ctrl.connect();
         scannerObject.nextLine();
-        System.out.println("\nSkriv inn tittel på spørsmålet ditt: ");
+        System.out.println("\nSkriv inn tittel på tråden ditt: ");
         String header = scannerObject.nextLine();
-        System.out.println("\nSkriv inn spørsmålet ditt: ");
+        System.out.println("\nSkriv inn innholdet på tråden: ");
         String content = scannerObject.nextLine();
+        System.out.println("Trykk på tallet for riktig tag:\n ");
+        System.out.println(
+                "1: question\n2: announcement\n3: homework\n4: homework solution\n5: lecture notes\n6: general announcement\n");
+        int input = scannerObject.nextInt();
+        String tag = "";
+        switch (input) {
+        case 1:
+            tag = "question";
+            break;
+        case 2:
+            tag = "announcement";
+            break;
+        case 3:
+            tag = "homework";
+            break;
+        case 4:
+            tag = "homework solution";
+            break;
+        case 5:
+            tag = "lecture notes";
+            break;
+        case 6:
+            tag = "genereal anouncement";
+            break;
+
+        }
         try {
             useCase2Ctrl.startThread();
-            useCase2Ctrl.makeThread(randomNum, 1, content, "question", header, userID, folderID);
+            useCase2Ctrl.makeThread(randomNum, 1, content, tag, header, userID, folderID);
             readThread(randomNum, userID);
 
         } catch (Exception e) {
@@ -137,7 +160,7 @@ public class Main {
     private static void replyTo(int folderID) {
         int randomNum = ThreadLocalRandom.current().nextInt(1, 100000 + 1); // generer et tilfeldig tall mellom
                                                                             // [1-100000 ] for å brukes til primary key
-        System.out.println("\nHer er trådene som eksisterer");
+        System.out.println("\nHer er trådene som finnes i mappen: ");
         InfoCtrl threadCtrl = new InfoCtrl();
         threadCtrl.connect();
         ArrayList<Thread> threads = threadCtrl.getThreads(folderID);
@@ -147,7 +170,7 @@ public class Main {
         System.out.println("\nSkriv inn ID på tråden du ønsker å svare på: ");
         int threadID = scannerObject.nextInt();
         scannerObject.nextLine();
-        System.out.println("\nSkriv inn svar: ");
+        System.out.println("\nSkriv inn svar: \n");
         String content = scannerObject.nextLine();
         readThread(threadID, userID);
 
@@ -156,9 +179,7 @@ public class Main {
 
         try {
             useCase3Ctrl.startReply();
-            useCase3Ctrl.makeReply(randomNum, 1, content, userID, threadID); // postID(1) må genereres hver gang og
-            // userID(4) kan
-            // være user.getUserID()
+            useCase3Ctrl.makeReply(randomNum, 1, content, userID, threadID);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -170,10 +191,14 @@ public class Main {
         UseCase4Ctrl searchController = new UseCase4Ctrl();
         searchController.connect();
         ArrayList<Thread> searchedThreads = searchController.search(keyword, courseID);
-        System.out.println("\nSøket ditt ga følgende resultater: ");
+        System.out.println("\nSøket ditt ga følgende resultater: \n");
         for (Thread thread : searchedThreads) {
-            System.out.println(thread.getPostID() + "\t" + thread.getHeader() + "\t" + thread.getContent());
+            System.out.printf("%-10d%-40s%-100s\n", thread.getPostID(), thread.getHeader(), thread.getContent());
+
         }
+        System.out.println("\nSkriv inn tråden du vil gå inn på:\n ");
+        int postID = scannerObject.nextInt();
+        readThread(postID, userID);
 
     }
 
@@ -191,7 +216,7 @@ public class Main {
         Thread thread = threadCtrl.getThread(postID);
         System.out.println(
                 "\nHer er tråden: \n" + thread.getPostID() + "\t" + thread.getHeader() + "\t" + thread.getContent());
-
+        followUp(postID, userID);
     }
 
     private static void chooseThread(int folderID) {
@@ -210,10 +235,32 @@ public class Main {
         readCtrl.connect();
         ArrayList<Viewed> views = readCtrl.postsRead();
         readCtrl.postsCreated(views); // Registrer også anntall poster opprettet ved å matche med e-post
-        System.out.println("Email:\t\t\tPosts Read:\t\t\tPosts Created:\n");
+        // System.out.println("Email:\t\t\tPosts Read:\t\t\tPosts Created:\n");
+        System.out.printf("%-22s%-22s%-22s\n", "Email", "Views", "Posts created: \n");
         for (Viewed viewed : views) {
-            System.out.println(viewed.getEmail() + "\t\t\t" + viewed.getCount() + "\t\t\t" + viewed.getPostsCreated());
+            System.out.printf("%-22s%-22d%-22d\n", viewed.getEmail(), viewed.getCount(), viewed.getPostsCreated());
 
+        }
+        System.out.println("\n");
+    }
+
+    private static void followUp(int postID, int userID) {
+        System.out.println("\nTast 1 hvis du vil svare på tråden(e) og 0 for å avslutte:\n ");
+        int ans = scannerObject.nextInt();
+        if (ans == 1) {
+            int randomNum = ThreadLocalRandom.current().nextInt(1, 100000 + 1);
+            System.out.println("Skriv inn svaret: ");
+            scannerObject.nextLine();
+            String content = scannerObject.nextLine();
+            UseCase3Ctrl replyController = new UseCase3Ctrl();
+            replyController.connect();
+
+            try {
+                replyController.startReply();
+                replyController.makeReply(randomNum, 0, content, userID, postID);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
