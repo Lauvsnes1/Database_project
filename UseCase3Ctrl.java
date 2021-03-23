@@ -6,6 +6,7 @@ public class UseCase3Ctrl extends DBConn {
     private PreparedStatement replyStatement;
     private PreparedStatement postStatement;
 
+    //metode for å forberede en Reply
     public void startReply() {
         try {
             replyStatement = conn.prepareStatement("INSERT INTO reply VALUES ((?),(?),(?),(?),(?))");
@@ -15,7 +16,7 @@ public class UseCase3Ctrl extends DBConn {
 
         }
     }
-
+    //metode for å opprette en Reply
     public void makeReply(int postID, int anonymous, String content, int userID, int threadID) {
         try {
             replyStatement.setInt(1, postID);

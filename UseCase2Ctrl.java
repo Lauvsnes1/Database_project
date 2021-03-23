@@ -6,7 +6,9 @@ public class UseCase2Ctrl extends DBConn {
     private PreparedStatement postStatement;
     private int postID;
 
+    //metode for å forberede en Thread
     public void startThread() {
+    
         try {
             threadStatement = conn.prepareStatement("INSERT INTO thread VALUES ((?),(?),(?),(?),(?),(?),(?))");
             postStatement = conn.prepareStatement("INSERT INTO post VALUES ((?),(?),(?),(?))");
@@ -16,9 +18,8 @@ public class UseCase2Ctrl extends DBConn {
         }
 
     }
-
-    public void makeThread(int postID, int anonymous, String content, String tag, String header, int userID,
-            int folderID) {
+    //metode for å opprette en Thread
+    public void makeThread(int postID, int anonymous, String content, String tag, String header, int userID, int folderID) {
         try {
             threadStatement.setInt(1, postID);
             threadStatement.setInt(2, anonymous);
