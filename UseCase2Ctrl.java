@@ -34,7 +34,7 @@ public class UseCase2Ctrl extends DBConn {
             postStatement.setInt(3, anonymous);
             postStatement.setInt(4, userID);
             postStatement.execute();
-            System.out.println("Post opprettet vellykket!");
+            System.out.println("\nPost opprettet vellykket!");
 
         } catch (Exception e) {
             System.out.println("Error when post created");

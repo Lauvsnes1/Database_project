@@ -21,7 +21,7 @@ public class UseCase5Ctrl extends DBConn {
             replyStatement.execute();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("\n Du har sett denne posten før");
         }
 
     }
@@ -34,7 +34,6 @@ public class UseCase5Ctrl extends DBConn {
             ResultSet result = statement.executeQuery(query);
 
             while (result.next()) {
-                System.out.println(result.getString("Email") + " har lest: " + result.getInt("COUNT(PostID)"));
                 views.add(new Viewed(result.getString("Email"), result.getInt("COUNT(PostID)"), 0));
             }
 

@@ -5,7 +5,6 @@ public class UseCase3Ctrl extends DBConn {
 
     private PreparedStatement replyStatement;
     private PreparedStatement postStatement;
-    private int postID;
 
     public void startReply() {
         try {

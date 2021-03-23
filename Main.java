@@ -147,7 +147,7 @@ public class Main {
         System.out.println("\nSkriv inn ID på tråden du ønsker å svare på: ");
         int threadID = scannerObject.nextInt();
         scannerObject.nextLine();
-        System.out.println("\nSkriv inn svar: ");
+        System.out.println("\nSkriv inn svar: \n");
         String content = scannerObject.nextLine();
         readThread(threadID, userID);
 
@@ -156,9 +156,7 @@ public class Main {
 
         try {
             useCase3Ctrl.startReply();
-            useCase3Ctrl.makeReply(randomNum, 1, content, userID, threadID); // postID(1) må genereres hver gang og
-            // userID(4) kan
-            // være user.getUserID()
+            useCase3Ctrl.makeReply(randomNum, 1, content, userID, threadID);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -170,10 +168,14 @@ public class Main {
         UseCase4Ctrl searchController = new UseCase4Ctrl();
         searchController.connect();
         ArrayList<Thread> searchedThreads = searchController.search(keyword, courseID);
-        System.out.println("\nSøket ditt ga følgende resultater: ");
+        System.out.println("\nSøket ditt ga følgende resultater: \n");
         for (Thread thread : searchedThreads) {
-            System.out.println(thread.getPostID() + "\t" + thread.getHeader() + "\t" + thread.getContent());
+            System.out.printf("%-10d%-40s%-100s\n", thread.getPostID(), thread.getHeader(), thread.getContent());
+
         }
+        System.out.println("\nSkriv inn tråden du vil gå inn på:\n ");
+        int postID = scannerObject.nextInt();
+        readThread(postID, userID);
 
     }
 
@@ -191,7 +193,7 @@ public class Main {
         Thread thread = threadCtrl.getThread(postID);
         System.out.println(
                 "\nHer er tråden: \n" + thread.getPostID() + "\t" + thread.getHeader() + "\t" + thread.getContent());
-
+        followUp(postID, userID);
     }
 
     private static void chooseThread(int folderID) {
@@ -210,10 +212,32 @@ public class Main {
         readCtrl.connect();
         ArrayList<Viewed> views = readCtrl.postsRead();
         readCtrl.postsCreated(views); // Registrer også anntall poster opprettet ved å matche med e-post
-        System.out.println("Email:\t\t\tPosts Read:\t\t\tPosts Created:\n");
+        // System.out.println("Email:\t\t\tPosts Read:\t\t\tPosts Created:\n");
+        System.out.printf("%-22s%-22s%-22s\n", "Email", "Views", "Posts created: \n");
         for (Viewed viewed : views) {
-            System.out.println(viewed.getEmail() + "\t\t\t" + viewed.getCount() + "\t\t\t" + viewed.getPostsCreated());
+            System.out.printf("%-22s%-22d%-22d\n", viewed.getEmail(), viewed.getCount(), viewed.getPostsCreated());
 
+        }
+        System.out.println("\n");
+    }
+
+    private static void followUp(int postID, int userID) {
+        System.out.println("\nTast 1 hvis du vil svare på tråden(e) og 0 for å avslutte:\n ");
+        int ans = scannerObject.nextInt();
+        if (ans == 1) {
+            int randomNum = ThreadLocalRandom.current().nextInt(1, 100000 + 1);
+            System.out.println("Skriv inn svaret: ");
+            scannerObject.nextLine();
+            String content = scannerObject.nextLine();
+            UseCase3Ctrl replyController = new UseCase3Ctrl();
+            replyController.connect();
+
+            try {
+                replyController.startReply();
+                replyController.makeReply(randomNum, 0, content, userID, postID);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
