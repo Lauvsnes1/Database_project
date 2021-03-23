@@ -1,28 +1,35 @@
 public class Viewed {
 
-    public int count;
+    public int postsCreated;
+    public int views;
     public String email;
 
-    Viewed() {
+    public Viewed() {
 
     }
 
-    Viewed(String email, int count) {
+    public Viewed(String email, int views, int postsCreated) {
         this.email = email;
-        this.count = count;
+        this.views = views;
+        this.postsCreated = postsCreated;
 
-    }
-
-    public int getUserID() {
-        return userID;
     }
 
     public int getCount() {
-        return count;
+        return views;
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public int getPostsCreated() {
+        return postsCreated;
+
+    }
+
+    public void setPostsCreated(int postsCreated) {
+        this.postsCreated = postsCreated;
     }
 
 }

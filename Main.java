@@ -209,9 +209,10 @@ public class Main {
         UseCase5Ctrl readCtrl = new UseCase5Ctrl();
         readCtrl.connect();
         ArrayList<Viewed> views = readCtrl.postsRead();
-        System.out.println("Email:\t\t\tPosts Read:");
+        readCtrl.postsCreated(views); // Registrer også anntall poster opprettet ved å matche med e-post
+        System.out.println("Email:\t\t\tPosts Read:\t\t\tPosts Created:\n");
         for (Viewed viewed : views) {
-            System.out.println(viewed.getEmail() + "\t\t\t" + viewed.getCount());
+            System.out.println(viewed.getEmail() + "\t\t\t" + viewed.getCount() + "\t\t\t" + viewed.getPostsCreated());
 
         }
     }
