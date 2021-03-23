@@ -30,16 +30,38 @@ public class UseCase5Ctrl extends DBConn {
         ArrayList<Viewed> views = new ArrayList<Viewed>();
         try {
             Statement statement = conn.createStatement();
-            String query = "SELECT Email,COUNT(PostID) FROM users LEFT OUTER JOIN viewed ON users.UserID = viewed.UserID GROUP BY users.UserID ORDER BY COUNT(PostID) DESC;";
+            String query = "SELECT Email,COUNT(PostID) FROM users LEFT OUTER JOIN viewed ON users.UserID = viewed.UserID GROUP BY users.UserID ORDER BY COUNT(PostID) DESC";
             ResultSet result = statement.executeQuery(query);
+
             while (result.next()) {
-                views.add(new Viewed(result.getString("Email"), result.getInt("COUNT(PostID)")));
+                System.out.println(result.getString("Email") + " har lest: " + result.getInt("COUNT(PostID)"));
+                views.add(new Viewed(result.getString("Email"), result.getInt("COUNT(PostID)"), 0));
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         return views;
+    }
+
+    public void postsCreated(ArrayList<Viewed> views) {
+        try {
+            Statement statement2 = conn.createStatement();
+            String query2 = "SELECT Email,COUNT(PostID) AS AntallOpprettet FROM users LEFT OUTER JOIN post ON post.UserID = users.UserID GROUP BY users.UserID";
+            ResultSet result2 = statement2.executeQuery(query2);
+
+            while (result2.next()) {
+                for (Viewed viewed : views) {
+                    if (viewed.getEmail().matches(result2.getString("Email"))) {
+                        viewed.setPostsCreated(result2.getInt("AntallOpprettet"));
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
