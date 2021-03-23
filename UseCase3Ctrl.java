@@ -4,11 +4,13 @@ import java.util.*;
 public class UseCase3Ctrl extends DBConn {
 
     private PreparedStatement replyStatement;
+    private PreparedStatement postStatement;
     private int postID;
 
     public void startReply() {
         try {
             replyStatement = conn.prepareStatement("INSERT INTO reply VALUES ((?),(?),(?),(?),(?))");
+            postStatement = conn.prepareStatement("INSERT INTO post VALUES ((?),(?),(?),(?))");
         } catch (Exception e) {
             System.out.println("Error during prepare of insert values into reply");
 
@@ -23,6 +25,12 @@ public class UseCase3Ctrl extends DBConn {
             replyStatement.setInt(4, userID);
             replyStatement.setInt(5, threadID);
             replyStatement.execute();
+
+            postStatement.setInt(1, postID);
+            postStatement.setString(2, content);
+            postStatement.setInt(3, anonymous);
+            postStatement.setInt(4, userID);
+            postStatement.execute();
             System.out.println("Svaret ble lagt inn suksessfullt!");
         } catch (Exception e) {
             System.out.println("error inserting values into reply");
