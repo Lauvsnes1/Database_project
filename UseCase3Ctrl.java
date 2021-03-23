@@ -30,7 +30,7 @@ public class UseCase3Ctrl extends DBConn {
             postStatement.setInt(3, anonymous);
             postStatement.setInt(4, userID);
             postStatement.execute();
-            System.out.println("Svaret ble lagt inn suksessfullt!");
+            System.out.println("\nSvaret ble lagt inn suksessfullt!");
         } catch (Exception e) {
             System.out.println("error inserting values into reply");
             e.printStackTrace();
