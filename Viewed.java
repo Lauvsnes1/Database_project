@@ -1,5 +1,5 @@
 public class Viewed {
-
+    // Klasse som lagrer informasjon om hvor mange poster en bruker har sett og opprettet
     public int postsCreated;
     public int views;
     public String email;

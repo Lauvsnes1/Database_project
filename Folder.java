@@ -1,5 +1,5 @@
 public class Folder {
-
+    //klasse for å lagre informasjon om folder-objekter
     int folderID;
     String folderName;
     int courseID;

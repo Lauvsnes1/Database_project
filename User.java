@@ -1,4 +1,5 @@
 public class User {
+    // klasse for å lagre informasjon om User
     String email;
     int userID;
     String userType;

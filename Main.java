@@ -60,6 +60,8 @@ public class Main {
 
     }
 
+    // loggInn metode som returner en boolsk verdi, true for riktig innput og false
+    // for feil passord eller brukernavn
     private static boolean logInn() {
 
         System.out.println("\nEmail: ");
@@ -88,6 +90,7 @@ public class Main {
 
     }
 
+    // Metode som tar inn UserID og displayer alle fagene brukeren er med i
     private static void chooseCourse(int userID) {
         System.out.println("\nHer er alle kursene du er medlemm i: \n");// Display all courses:
         InfoCtrl courseCtrl = new InfoCtrl();
@@ -99,6 +102,7 @@ public class Main {
         }
     }
 
+    // Metode som tar inn courseID og displayer alle mappene i faget
     private static void chooseFolder(int courseID) {
         System.out.println("\nHer er alle mappene som finnes: ");
         InfoCtrl folderCtrl = new InfoCtrl();
@@ -110,7 +114,22 @@ public class Main {
         }
     }
 
+    // Metode som tar inn folderID som argument, displayer alle trådene i mappen
+    private static void chooseThread(int folderID) {
+        System.out.println("\nHer er trådene som finnes i mappen: ");
+        InfoCtrl threadCtrl = new InfoCtrl();
+        threadCtrl.connect();
+        ArrayList<Thread> threads = threadCtrl.getThreads(folderID);
+        for (Thread thread : threads) {
+            System.out.println(thread.getPostID() + "\t" + thread.getHeader());
+        }
+
+    }
+
+    // Metode som tar inn folderID som referer til hvor det skal opprettes en tråd,
+    // og oppretter her
     private static void createPost(int folderID) {
+
         int randomNum = ThreadLocalRandom.current().nextInt(1, 100000 + 1);
 
         UseCase2Ctrl useCase2Ctrl = new UseCase2Ctrl();
@@ -157,6 +176,8 @@ public class Main {
 
     }
 
+    // Metode som tar inn folderID, displayer alle trådene og lar brukeren velge
+    // hvilken tråd å svare på
     private static void replyTo(int folderID) {
         int randomNum = ThreadLocalRandom.current().nextInt(1, 100000 + 1); // generer et tilfeldig tall mellom
                                                                             // [1-100000 ] for å brukes til primary key
@@ -187,6 +208,8 @@ public class Main {
 
     }
 
+    // metode som tar inn et "keyword" og en courseID og displayer alle trådene som
+    // matcher "keyword" i det aktuelle faget, på tvers av mapper
     private static void searchFor(String keyword, int courseID) {
         UseCase4Ctrl searchController = new UseCase4Ctrl();
         searchController.connect();
@@ -202,6 +225,8 @@ public class Main {
 
     }
 
+    // Metode som tar inn én postID og userid og registrerer at brukerern har lest
+    // tråden
     private static void readThread(int postID, int userID) {
         UseCase5Ctrl viewCtrl = new UseCase5Ctrl();
         viewCtrl.connect();
@@ -219,23 +244,13 @@ public class Main {
         followUp(postID, userID);
     }
 
-    private static void chooseThread(int folderID) {
-        System.out.println("\nHer er trådene som finnes i mappen: ");
-        InfoCtrl threadCtrl = new InfoCtrl();
-        threadCtrl.connect();
-        ArrayList<Thread> threads = threadCtrl.getThreads(folderID);
-        for (Thread thread : threads) {
-            System.out.println(thread.getPostID() + "\t" + thread.getHeader());
-        }
-
-    }
-
+    // Metode som viser statistikken til alle brukere på plattformen i synkende
+    // rekkefølge
     private static void displayStatistics() {
         UseCase5Ctrl readCtrl = new UseCase5Ctrl();
         readCtrl.connect();
         ArrayList<Viewed> views = readCtrl.postsRead();
         readCtrl.postsCreated(views); // Registrer også anntall poster opprettet ved å matche med e-post
-        // System.out.println("Email:\t\t\tPosts Read:\t\t\tPosts Created:\n");
         System.out.printf("%-22s%-22s%-22s\n", "Email", "Views", "Posts created: \n");
         for (Viewed viewed : views) {
             System.out.printf("%-22s%-22d%-22d\n", viewed.getEmail(), viewed.getCount(), viewed.getPostsCreated());
@@ -244,6 +259,8 @@ public class Main {
         System.out.println("\n");
     }
 
+    // Metode som gir deg mulighet til å svare på en tråd du har lest eller søkt deg
+    // frem til, ikke nødvendig for oppgaven men helt naturlig å immplementere
     private static void followUp(int postID, int userID) {
         System.out.println("\nTast 1 hvis du vil svare på tråden(e) og 0 for å avslutte:\n ");
         int ans = scannerObject.nextInt();

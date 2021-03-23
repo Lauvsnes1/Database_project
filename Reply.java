@@ -1,4 +1,5 @@
 public class Reply {
+    //Klasse for å lagre informasjon om reply-objekter
 
     int postID;
     boolean anonymous;

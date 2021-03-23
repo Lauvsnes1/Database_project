@@ -2,11 +2,18 @@ import java.util.ArrayList;
 import java.sql.*;
 
 public class InfoCtrl extends DBConn {
+    /*
+     * Denne klassen brukes som en generell informasjonskontroller og henter fag,
+     * mapper, tråder og enkelttråder på veldig lik måte.
+     */
 
     int userID;
     int folderID;
     int courseID;
 
+    // Tar inn userID og returner en liste med Course objekter fra databasen som er
+    // alle fagene
+    // den gitte brukeren er med i
     public ArrayList<Course> getCourses(int userID) {
         this.userID = userID;
         ArrayList<Course> courseList = new ArrayList<>();
@@ -26,6 +33,10 @@ public class InfoCtrl extends DBConn {
 
     }
 
+    /*
+     * Tar inn en courseID og returnerer en liste med alle Folder-objekter fra
+     * databasen som er alle mapper i det gitte faget
+     */
     public ArrayList<Folder> getFolder(int courseID) {
         this.courseID = courseID;
         ArrayList<Folder> folderList = new ArrayList<>();
@@ -46,6 +57,10 @@ public class InfoCtrl extends DBConn {
 
     }
 
+    /*
+     * Tar inn en folderID og returnerer en liste med Thread-objekter fra databasen
+     * som er alle trådene i den gitte mappen
+     */
     public ArrayList<Thread> getThreads(int folderID) {
         this.folderID = folderID;
         ArrayList<Thread> threadList = new ArrayList<>();
@@ -67,6 +82,8 @@ public class InfoCtrl extends DBConn {
 
     }
 
+    // Tar inn én postID og returnerer ett Thread-objekt fra databasen som
+    // sammsvarer med den unike postID
     public Thread getThread(int postID) {
         Thread thread = new Thread();
         try {

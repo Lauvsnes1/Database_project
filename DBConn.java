@@ -1,7 +1,7 @@
 import java.sql.*;
-import java.util.Properties;
 
 public abstract class DBConn {
+  // Abstrakt klasse som kobler til mysql serveren
   protected Connection conn;
 
   public DBConn() {

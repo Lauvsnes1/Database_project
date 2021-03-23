@@ -1,4 +1,7 @@
 public class Thread {
+     
+    //klasse for å lagre informasjon om tråder
+
     int postID;
     int anonymous;
     int userID;

@@ -1,10 +1,11 @@
 
 public class Course {
+    //Klasse for å lagre informasjon om course objekter
     int courseID;
     String courseName;
     String term;
     int canBeAnonymous;
-    int userID;// the constructor of the course
+    int userID;
 
     Course(int courseID, String courseName, String term, int canBeAnonymous, int userID) {
         this.courseID = courseID;
