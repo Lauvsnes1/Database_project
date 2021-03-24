@@ -1,19 +1,20 @@
 import java.sql.*;
-import java.util.*;
 
 public class UseCase3Ctrl extends DBConn {
     // denne klassen brukes til UseCase3. Altså opprette kommunikasjon med databasen
     // med sql
 
-    private PreparedStatement replyStatement
+    private PreparedStatement replyStatement;
+    private PreparedStatement postStatement;
 
     public void startReply() {
-        //metode for å forberede en Reply
+        // metode for å forberede en Reply
         try {
             replyStatement = conn.prepareStatement("INSERT INTO reply VALUES ((?),(?),(?),(?),(?))");
             postStatement = conn.prepareStatement("INSERT INTO post VALUES ((?),(?),(?),(?))");
         } catch (Exception e) {
             System.out.println("Error during prepare of insert values into reply");
+        }
     }
 
     public void makeReply(int postID, int anonymous, String content, int userID, int threadID) {
@@ -21,6 +22,9 @@ public class UseCase3Ctrl extends DBConn {
         // enklere spørring senere
         try {
 
+            replyStatement.setInt(1, postID);
+            replyStatement.setInt(2, 1); // Ikke lagt inn støtte for anonymitet enda, da det ikke var et krav i noen av
+                                         // usecasene
             replyStatement.setString(3, content);
             replyStatement.setInt(4, userID);
             replyStatement.setInt(5, threadID);

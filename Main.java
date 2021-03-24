@@ -24,7 +24,7 @@ public class Main {
                 int courseID = scannerObject.nextInt();
                 chooseFolder(courseID);
 
-                System.out.println("\nTrykk 1 for å søke etter tråd eller trykk 0 for å velge mappe");
+                System.out.println("\nTrykk 1 for å søke etter tråd eller trykk 0 for å velge mappe: ");
                 int choice2 = scannerObject.nextInt();
                 if (choice2 == 1) {
                     scannerObject.nextLine();
@@ -36,7 +36,7 @@ public class Main {
                     System.out.println("\nSkriv inn inn ID på mappen du ønsker å gå inn i: ");
                     int folderID = scannerObject.nextInt();
 
-                    System.out.println("\nTrykk 0 for å opprette tråd, 1 for å opprette svar og 2 for å lese");
+                    System.out.println("\nTrykk 0 for å opprette tråd, 1 for å opprette svar og 2 for å lese: ");
                     int choice3 = scannerObject.nextInt();
                     if (choice3 == 0) {
                         createPost(folderID);
@@ -239,8 +239,8 @@ public class Main {
         InfoCtrl threadCtrl = new InfoCtrl();
         threadCtrl.connect();
         Thread thread = threadCtrl.getThread(postID);
-        System.out.println(
-                "\nHer er tråden: \n" + thread.getPostID() + "\t" + thread.getHeader() + "\t" + thread.getContent());
+        System.out.println("\nHer er tråden: \n" + thread.getPostID() + "\t" + thread.getHeader() + "\t\t\t"
+                + thread.getContent());
         followUp(postID, userID);
     }
 
@@ -266,7 +266,7 @@ public class Main {
         int ans = scannerObject.nextInt();
         if (ans == 1) {
             int randomNum = ThreadLocalRandom.current().nextInt(1, 100000 + 1);
-            System.out.println("Skriv inn svaret: ");
+            System.out.println("\nSkriv inn svaret: ");
             scannerObject.nextLine();
             String content = scannerObject.nextLine();
             UseCase3Ctrl replyController = new UseCase3Ctrl();

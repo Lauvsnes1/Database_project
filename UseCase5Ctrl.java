@@ -9,7 +9,6 @@ public class UseCase5Ctrl extends DBConn {
     private PreparedStatement replyStatement;
 
     // Starter en statement
-    protec ted
 
     void startViewed() {
         try {
@@ -49,7 +48,7 @@ public class UseCase5Ctrl extends DBConn {
             while (result.next()) {
                 views.add(new Viewed(result.getString("Email"), result.getInt("COUNT(PostID)"), 0));
             }
-            //Poster laget settet til 0 her
+            // Poster laget settet til 0 her
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,7 +59,7 @@ public class UseCase5Ctrl extends DBConn {
     /*
      * Finner hvor mange poster hver bruker har opprettet ved å joine users og post
      * tabellen. Deretter tar funksjonen inn lista fra postRead() og legger til hvor
-     * mange poster hver bruker har laget
+     * mange poster hver bruker har
      */
     public void postsCreated(ArrayList<Viewed> views) {
         try {
