@@ -11,7 +11,7 @@ public abstract class DBConn {
   public void connect() {
     try {
       Class.forName("com.mysql.cj.jdbc.Driver");
-      conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Prosjekt", "root", "fotball1");
+      conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Prosjekt", "root", "********");
     } catch (Exception e) {
       throw new RuntimeException("Unable to connect", e);
     }
